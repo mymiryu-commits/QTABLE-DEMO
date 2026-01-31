@@ -344,6 +344,57 @@
             opacity: 1;
         }
 
+
+        .style-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 600px) {
+            .style-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .style-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eee;
+            transition: transform 0.2s;
+        }
+
+        .style-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .style-img {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .style-info {
+            padding: 12px;
+        }
+
+        .style-info h4 {
+            font-size: 0.95rem;
+            margin: 0 0 4px 0;
+            color: #333;
+        }
+
+        .style-info p {
+            font-size: 0.8rem;
+            color: #888;
+            margin: 0;
+            line-height: 1.4;
+            word-break: keep-all;
+        }
+
         .floating-btn {
             position: fixed;
             bottom: 20px;
@@ -442,6 +493,7 @@
                 <span class="tag">간편결제</span>
             </div>
         </div>
+
         <div class="feature-card">
             <span class="feature-icon">✨</span>
             <div class="feature-title">우리 매장만의 감성</div>
@@ -449,6 +501,34 @@
             <div class="tag-group">
                 <span class="tag">커스텀 디자인</span>
                 <span class="tag">브랜딩</span>
+            </div>
+        </div>
+
+        <!-- 3가지 스타일 소개 섹션 -->
+        <div style="margin-top: 40px; text-align: center;">
+            <h3 style="font-size: 1.2rem; margin-bottom: 20px;">취향대로 고르는 3가지 타입</h3>
+            <div class="style-grid">
+                <div class="style-card">
+                    <img src="images/style_stand.jpg" alt="테이블 스탠드형" class="style-img">
+                    <div class="style-info">
+                        <h4>1. 심플 스탠드형</h4>
+                        <p>가장 실용적인 디자인.<br>좁은 테이블도 OK.</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <img src="images/style_tablet.jpg" alt="태블릿 메뉴형" class="style-img">
+                    <div class="style-info">
+                        <h4>2. 태블릿 메뉴형</h4>
+                        <p>메뉴판처럼 직관적인<br>테블릿 통합 디자인.</p>
+                    </div>
+                </div>
+                <div class="style-card">
+                    <img src="images/style_character.jpg" alt="감성 캐릭터형" class="style-img">
+                    <div class="style-info">
+                        <h4>3. 감성 캐릭터형</h4>
+                        <p>귀여운 캐릭터로<br>주문과 포인트 적립 유도.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
