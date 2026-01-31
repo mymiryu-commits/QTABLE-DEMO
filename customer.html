@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>큐테이블 | 스마트 테이블 오더</title>
+    <meta name="description" content="QR 스캔 한 번으로 주문부터 결제까지">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="payment.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="receipt.css">
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+</head>
+
+<body>
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo"><span class="logo-icon">📱</span><span class="logo-text">QTable</span></div>
+            <div class="loading-spinner"></div>
+            <p class="loading-text">메뉴를 불러오는 중...</p>
+        </div>
+    </div>
+
+    <div id="app" class="app-container">
+        <header class="header">
+            <div class="header-content">
+                <div class="restaurant-info">
+                    <span class="restaurant-icon">🍜</span>
+                    <div class="restaurant-details">
+                        <h1 class="restaurant-name">맛있는 분식당</h1>
+                        <p class="table-info">테이블 3번</p>
+                    </div>
+                </div>
+                <span class="demo-badge">DEMO</span>
+            </div>
+        </header>
+
+        <main id="menu-section" class="main-content">
+            <nav class="category-tabs">
+                <button class="category-tab active" data-category="popular">🔥 인기</button>
+                <button class="category-tab" data-category="main">🍚 식사</button>
+                <button class="category-tab" data-category="side">🥟 분식</button>
+                <button class="category-tab" data-category="drink">🥤 음료</button>
+            </nav>
+            <div id="menu-grid" class="menu-grid"></div>
+        </main>
+
+        <div id="cart-fab" class="cart-fab hidden">
+            <div class="cart-fab-content"><span class="cart-icon">🛒</span><span id="cart-count"
+                    class="cart-count">0</span></div>
+            <div class="cart-fab-info"><span id="cart-total" class="cart-total">0원</span><span
+                    class="cart-action">주문하기</span></div>
+        </div>
+    </div>
+
+    <div id="cart-modal" class="modal"></div>
+    <div id="payment-section" class="payment-section hidden"></div>
+    <div id="complete-section" class="complete-section hidden"></div>
+    <div id="owner-dashboard" class="owner-dashboard hidden"></div>
+    <div id="menu-detail-modal" class="modal menu-detail-modal"></div>
+
+    <script src="app.js"></script>
+    <script src="payment.js"></script>
+</body>
+
+</html>

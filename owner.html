@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QTable | 사장님 대시보드</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .owner-dashboard {
+            position: static;
+            height: 100vh;
+            background: #1a1a2e;
+        }
+
+        .dashboard-content {
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .notification-toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: linear-gradient(135deg, #FF6B35 0%, #E55A2B 100%);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transform: translateX(120%);
+            transition: transform 0.4s ease-out;
+        }
+
+        .notification-toast.show {
+            transform: translateX(0);
+        }
+
+        .order-list {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .order-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #FF6B35;
+            animation: slideIn 0.3s ease-out;
+            position: relative;
+        }
+
+        .ai-insight-box {
+            margin-top: 12px;
+            background: rgba(108, 99, 255, 0.15);
+            border: 1px solid #6C63FF;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.85rem;
+            color: #E0E0FF;
+            display: flex;
+            gap: 8px;
+            align-items: start;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .order-items {
+            color: white;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .order-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-price {
+            color: #FF6B35;
+            font-weight: 700;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.4);
+            padding: 40px 0;
+        }
+
+        .link-home {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            z-index: 1000;
+        }
+
+        .user-tag {
+            background: #333;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: #aaa;
+            margin-left: 8px;
+        }
+
+        /* QR Modal */
+        #qr-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .qr-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            color: #333;
+            max-width: 320px;
+            animation: popIn 0.3s ease;
+        }
+
+        .qr-card h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .table-btn-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .table-btn {
+            padding: 8px 12px;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .table-btn.active {
+            background: #FF6B35;
+            color: white;
+            border-color: #FF6B35;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="index.html" class="link-home">← 홈으로</a>
+    <div class="owner-dashboard">
+        <div class="dashboard-header">
+            <h2 style="margin-left: 30px;">📊 실시간 주문 접수 현황</h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+                <button onclick="showQrModal()"
+                    style="background:#fff; color:#333; border:none; padding:6px 12px; border-radius:20px; font-weight:bold; cursor:pointer;">📱
+                    테이블 QR 설정</button>
+                <span class="preview-badge" style="background:var(--success)">LIVE</span>
+            </div>
+        </div>
+
+        <div class="dashboard-content">
+            <!-- 실시간 주문 목록 -->
+            <div class="dashboard-card">
+                <h3>🔔 들어온 주문</h3>
+                <div id="order-list" class="order-list">
+                    <div class="empty-state">
+                        <p>대기 중인 주문이 없습니다</p>
+                        <p style="font-size:0.8rem; margin-top:8px;">테이블 QR로 주문이 들어오면<br>여기에 테이블 번호와 함께 표시됩니다</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-card ai-card">
+                <div class="ai-header">
+                    <span class="ai-icon">🤖</span>
+                    <h3>AI 경영 코파일럿</h3>
+                </div>
+                <!-- 여기에 실시간 분석 통계가 쌓일 곳 -->
+                <div class="ai-insights" id="ai-insights-container">
+                    <div class="insight-item">
+                        <span class="insight-icon">📈</span>
+                        <p>"오늘 떡볶이 주문이 평소보다 <strong>20%</strong> 많습니다. 재고를 확인하세요!"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오늘의 매출 -->
+            <div class="dashboard-card stats-card">
+                <h3>💰 오늘의 매출</h3>
+                <div class="stats-grid">
+                    <div class="stat-item"><span id="total-sales" class="stat-value">₩487,000</span><span
+                            class="stat-label">총 매출</span></div>
+                    <div class="stat-item"><span id="order-count" class="stat-value">47건</span><span
+                            class="stat-label">주문 수</span></div>
+                    <div class="stat-item"><span id="avg-price" class="stat-value">₩10,361</span><span
+                            class="stat-label">객단가</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 알림 토스트 -->
+    <div id="toast" class="notification-toast">
+        <span style="font-size: 1.5rem">🔔</span>
+        <div>
+            <h4 style="margin:0">새 주문 도착!</h4>
+            <p style="margin:0; font-size:0.9rem; opacity:0.9">테이블 3번에서 주문이 들어왔습니다</p>
+        </div>
+    </div>
+
+    <!-- QR 모달 -->
+    <div id="qr-modal" class="hidden">
+        <div class="qr-card">
+            <h3>📱 테이블 QR 생성</h3>
+            <p style="font-size:0.8rem; color:#666; margin-bottom:12px;">테이블 번호를 선택하면 고유 QR이 생성됩니다</p>
+
+            <div class="table-btn-group">
+                <button class="table-btn active" onclick="generateQr(1, this)">1번</button>
+                <button class="table-btn" onclick="generateQr(2, this)">2번</button>
+                <button class="table-btn" onclick="generateQr(3, this)">3번</button>
+                <button class="table-btn" onclick="generateQr(4, this)">4번</button>
+            </div>
+
+            <div id="qrcode" style="margin:20px auto; display:flex; justify-content:center;"></div>
+
+            <p id="store-link" style="font-size:0.7rem; color:#aaa; word-break:break-all; display:none;"></p>
+            <button onclick="document.getElementById('qr-modal').classList.add('hidden')"
+                style="background:#333; color:white; border:none; padding:10px 20px; border-radius:8px; width:100%;">닫기</button>
+        </div>
+    </div>
+
+    <script>
+        let totalSales = 487000;
+        let totalOrders = 47;
+        let peer = null;
+        let myPeerId = null;
+
+        // 1. BroadcastChannel (로컬용)
+        const bc = new BroadcastChannel('qtable_demo');
+        bc.onmessage = (event) => processData(event.data);
+
+        // 2. PeerJS (원격용)
+        function initPeer() {
+            // 랜덤 ID 생성
+            const id = 'qtable-store-' + Math.floor(Math.random() * 10000);
+            peer = new Peer(id);
+
+            peer.on('open', (id) => {
+                myPeerId = id;
+                console.log('My peer ID is: ' + id);
+            });
+
+            peer.on('connection', (conn) => {
+                conn.on('data', (data) => {
+                    console.log('Received remote data:', data);
+                    processData(data);
+                });
+                setTimeout(() => conn.send({ type: 'WELCOME', msg: '환영합니다! 주문을 기다리고 있습니다.' }), 500);
+            });
+
+            peer.on('error', (err) => console.log('Peer error:', err));
+        }
+
+        // 공통 데이터 처리
+        function processData(payload) {
+            if (payload.type === 'NEW_ORDER') {
+                handleNewOrder(payload.data);
+            } else if (payload.type === 'REVIEW_VERIFIED') {
+                handleReviewVerified(payload.data);
+            }
+        }
+
+        function showQrModal() {
+            document.getElementById('qr-modal').classList.remove('hidden');
+            // 기본 1번 테이블 생성
+            generateQr(1, document.querySelector('.table-btn'));
+        }
+
+        function generateQr(tableNum, btn) {
+            // 버튼 스타일
+            document.querySelectorAll('.table-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+
+            const qrContainer = document.getElementById('qrcode');
+            qrContainer.innerHTML = '';
+
+            // URL에 store ID와 table 번호 포함
+            const baseUrl = window.location.origin + window.location.pathname.replace('owner.html', 'customer.html');
+            // searchParams를 이용해 안전하게 구성
+            const fullUrl = `${baseUrl}?store=${myPeerId}&table=${tableNum}`;
+
+            new QRCode(qrContainer, {
+                text: fullUrl,
+                width: 180,
+                height: 180
+            });
+
+            const linkText = document.getElementById('store-link');
+            linkText.textContent = fullUrl;
+            linkText.style.display = 'block';
+        }
+
+        // 초기 실행
+        initPeer();
+
+        function handleNewOrder(data) {
+            try { new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3').play().catch(e => { }); } catch (e) { }
+
+            // 테이블 번호 확인 ('Takeout' 등 기본값 처리)
+            const tableDisplay = data.tableNumber ? `테이블 ${data.tableNumber}번` : '포장/대기';
+
+            showToast('🔔 새 주문 도착!', `${tableDisplay}에서 주문이 들어왔습니다`, '#FF6B35');
+
+            const container = document.getElementById('order-list');
+            const emptyState = container.querySelector('.empty-state');
+            if (emptyState) emptyState.remove();
+
+            // 사용자 정보 분석
+            const userInfo = data.userInfo || { gender: 'unknown', age: 'unknown' };
+            const userTag = (userInfo.gender !== 'unknown')
+                ? `<span class="user-tag">👤 ${userInfo.age}대 ${userInfo.gender === 'male' ? '남성' : '여성'}</span>`
+                : '';
+
+            // 재방문 여부
+            const revisitTag = (userInfo.isRevisit)
+                ? `<span class="user-tag" style="color:#03C75A; background:rgba(3,199,90,0.1); border:1px solid #03C75A;">⭐ 재방문</span>`
+                : '';
+
+            // AI 인사이트 생성
+            const aiInsight = generateAiInsight(userInfo, data.items);
+
+            const orderCard = document.createElement('div');
+            orderCard.className = 'order-card';
+            orderCard.innerHTML = `
+                <div class="order-header">
+                    <span style="font-size:1.1rem; font-weight:bold; color:white;">${tableDisplay}</span>
+                    <span>방금 전</span>
+                </div>
+                <div class="order-header" style="margin-top:-4px; margin-bottom:12px;">
+                     <span style="font-size:0.8rem; color:#888;">주문번호 ${data.orderNumber} ${userTag} ${revisitTag}</span>
+                </div>
+                <div class="order-items">
+                    ${data.items.map(item => `${item.name} x${item.quantity}`).join(', ')}
+                </div>
+                <!-- AI 분석 결과 표시 (코파일럿) -->
+                <div class="ai-insight-box">
+                    <span>🤖</span>
+                    <div>
+                        <strong>AI 코파일럿 분석</strong><br>
+                        ${aiInsight}
+                    </div>
+                </div>
+                <div class="order-footer" style="margin-top:10px;">
+                    <span class="order-price">₩${data.total.toLocaleString()}</span>
+                    <div>
+                        <button class="btn btn-sm btn-accept" style="background:var(--success); color:white; border:none; padding:4px 8px; border-radius:4px; font-weight:bold;" onclick="this.parentElement.innerHTML='접수됨'">접수완료</button>
+                    </div>
+                </div>
+            `;
+            container.prepend(orderCard);
+
+            totalSales += data.total;
+            totalOrders += 1;
+            animateValue(document.getElementById('total-sales'), totalSales - data.total, totalSales, 1000);
+            document.getElementById('order-count').textContent = totalOrders + '건';
+            document.getElementById('avg-price').textContent = '₩' + Math.floor(totalSales / totalOrders).toLocaleString();
+        }
+
+        function generateAiInsight(user, items) {
+            // 간단한 규칙 기반 AI 시뮬레이션
+            if (user.gender === 'unknown') return "고객 데이터 미수집. 일반 응대 권장.";
+
+            const isSpicy = items.some(i => i.name.includes('떡볶이') || i.name.includes('라면') || i.name.includes('제육'));
+            const isAlcohol = items.some(i => i.name.includes('맥주') || i.name.includes('소주'));
+
+            if (user.age === '20' && user.gender === 'female') {
+                if (isSpicy) return "20대 여성 고객은 매운맛 재구매율이 높습니다. <strong>쿨피스 서비스</strong>로 단골 유치하세요!";
+                return "SNS 리뷰 참여율이 높은 고객군입니다. <strong>영수증 리뷰 이벤트</strong>를 적극 권하세요.";
+            }
+            if (user.age === '20' && user.gender === 'male') {
+                return "양 많은 메뉴를 선호하는 20대 남성입니다. <strong>공기밥 추가</strong> 여부를 물어보세요.";
+            }
+            if (user.age === '30') {
+                if (isAlcohol) return "30대 직장인 회식 추정. <strong>안주류 추가 주문</strong> 가능성이 높습니다.";
+                return "점심시간 방문 30대입니다. <strong>빠른 서빙</strong>이 만족도의 핵심입니다.";
+            }
+            if (user.age === '40') {
+                return "가족 단위 방문 가능성이 높습니다. <strong>아이들 식기</strong>가 필요한지 체크하세요.";
+            }
+
+            return `${user.age}대 ${user.gender === 'male' ? '남성' : '여성'} 고객 방문. ${items[0].name} 메뉴 선호도 상승 중.`;
+        }
+
+        function handleReviewVerified(data) {
+            try { new Audio('https://assets.mixkit.co/active_storage/sfx/2000/2000-preview.mp3').play().catch(e => { }); } catch (e) { }
+
+            const tableMsg = data.tableNumber ? `[테이블 ${data.tableNumber}]` : '';
+            showToast('🎉 리뷰 인증 요청!', `${tableMsg} 손님이 리뷰를 썼습니다!`, '#03C75A');
+
+            const container = document.getElementById('order-list');
+            const reviewCard = document.createElement('div');
+            reviewCard.className = 'order-card';
+            reviewCard.style.cssText = "border-left: 4px solid #03C75A; background: rgba(3, 199, 90, 0.1);";
+            reviewCard.innerHTML = `
+                <div class="order-header" style="color:#03C75A; font-weight:bold;">
+                    <span>💝 리뷰 이벤트 인증</span>
+                    <span>방금 전</span>
+                </div>
+                <div class="order-items" style="color:white;">
+                    ${tableMsg} 주문번호 <strong>${data.orderNumber}</strong>
+                </div>
+                <div class="order-footer">
+                    <span style="color:#aaa; font-size:0.8rem;">서비스 음료 제공 필요</span>
+                    <button class="btn btn-sm" style="background:#03C75A; color:white; border:none; padding:4px 12px; border-radius:4px; font-weight:bold;" onclick="this.parentElement.innerHTML='확인 완료'">서비스 제공함</button>
+                </div>
+            `;
+            container.prepend(reviewCard);
+        }
+
+        function showToast(title, msg, color) {
+            const toast = document.getElementById('toast');
+            toast.style.background = color || '#FF6B35';
+            toast.querySelector('h4').textContent = title;
+            toast.querySelector('p').textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 5000);
+        }
+
+        function animateValue(obj, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                obj.innerHTML = '₩' + Math.floor(progress * (end - start) + start).toLocaleString();
+                if (progress < 1) window.requestAnimationFrame(step);
+            };
+            window.requestAnimationFrame(step);
+        }
+    </script>
+</body>
+
+</html>

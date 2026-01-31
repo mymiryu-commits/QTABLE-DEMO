@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>QTable | 데모 체험</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Sans KR', sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            padding: 20px;
+            max-width: 480px;
+            width: 100%;
+        }
+
+        h1 {
+            margin-bottom: 8px;
+            color: #1A1A1A;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .mode-card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: 2px solid transparent;
+            text-align: left;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .mode-card:active {
+            transform: scale(0.98);
+        }
+
+        .customer-mode:hover {
+            border-color: #FF6B35;
+        }
+
+        .owner-mode:hover {
+            border-color: #1a1a2e;
+        }
+
+        .icon-box {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+
+        .customer-mode .icon-box {
+            background: #FFF5F0;
+            color: #FF6B35;
+        }
+
+        .owner-mode .icon-box {
+            background: #F0F0F5;
+            color: #1a1a2e;
+        }
+
+        h2 {
+            margin: 0 0 4px 0;
+            font-size: 1.1rem;
+        }
+
+        .desc {
+            font-size: 0.85rem;
+            color: #888;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>QTable 데모 체험</h1>
+        <p>10초면 충분합니다. QR 주문을 경험해보세요.</p>
+
+        <div class="card-container">
+            <a href="customer.html" class="mode-card customer-mode" target="_blank">
+                <div class="icon-box">🍽️</div>
+                <div>
+                    <h2>손님용 화면 체험</h2>
+                    <p class="desc">QR 코드를 찍고 들어온 상황입니다.<br>메뉴를 고르고 주문해보세요.</p>
+                </div>
+            </a>
+
+            <a href="owner.html" class="mode-card owner-mode" target="_blank">
+                <div class="icon-box">�</div>
+                <div>
+                    <h2>사장님용 관리자 화면</h2>
+                    <p class="desc">주문이 들어오면 실시간으로<br>알림이 뜨고 매출이 올라갑니다.</p>
+                </div>
+            </a>
+        </div>
+
+        <p style="margin-top: 40px; font-size: 0.8rem; color: #999;">
+            💡 Tip: 두 화면을 각각 다른 탭(또는 다른 기기)에 띄워두고,<br>
+            손님 화면에서 주문하면 사장님 화면이 바로 반응합니다!
+        </p>
+    </div>
+</body>
+
+</html>

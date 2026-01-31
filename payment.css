@@ -1,0 +1,413 @@
+/* Payment Section Styles */
+.payment-section {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: var(--bg-primary);
+    overflow-y: auto;
+}
+
+.payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    background: white;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.back-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.payment-header h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.spacer {
+    width: 40px;
+}
+
+.payment-content {
+    padding: 20px;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.payment-card {
+    background: white;
+    border-radius: var(--radius-md);
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: var(--shadow-sm);
+}
+
+.payment-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.payment-order-items {
+    margin-bottom: 16px;
+}
+
+.payment-order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.payment-order-item:last-child {
+    border-bottom: none;
+}
+
+.payment-total-row {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 2px solid var(--text-primary);
+    font-weight: 700;
+}
+
+.payment-total-amount {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+/* Dutch Pay Card */
+.dutch-pay-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.dutch-pay-header h3 {
+    margin-bottom: 0;
+}
+
+.feature-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.dutch-pay-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.dutch-pay-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.dutch-option {
+    display: block;
+    cursor: pointer;
+}
+
+.dutch-option input {
+    display: none;
+}
+
+.option-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: all 0.3s;
+}
+
+.dutch-option input:checked+.option-content {
+    border-color: var(--primary);
+    background: #FFF5F0;
+}
+
+.option-icon {
+    font-size: 1.5rem;
+}
+
+.option-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.option-text strong {
+    font-size: 0.95rem;
+}
+
+.option-text small {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+}
+
+.dutch-pay-selector {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f8f9fa;
+    border-radius: var(--radius-md);
+}
+
+.dutch-people-count {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.count-control {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.count-control button {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.count-control span {
+    font-size: 1.2rem;
+    font-weight: 700;
+    min-width: 24px;
+    text-align: center;
+}
+
+.dutch-split-info {
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.dutch-split-info strong {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+/* Payment Methods */
+.payment-methods {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.payment-method {
+    flex: 1;
+    min-width: 100px;
+    cursor: pointer;
+}
+
+.payment-method input {
+    display: none;
+}
+
+.method-icon {
+    display: block;
+    padding: 14px 12px;
+    text-align: center;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.payment-method input:checked+.method-icon {
+    border-color: var(--primary);
+    background: #FFF5F0;
+    color: var(--primary);
+}
+
+.method-icon.kakao {
+    background: #FEE500;
+    border-color: #FEE500;
+    color: #3C1E1E;
+}
+
+.payment-method input:checked+.method-icon.kakao {
+    border-color: #E5CF00;
+}
+
+.method-icon.naver {
+    background: #03C75A;
+    border-color: #03C75A;
+    color: white;
+}
+
+.payment-method input:checked+.method-icon.naver {
+    border-color: #02B350;
+}
+
+.payment-footer {
+    position: sticky;
+    bottom: 0;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.btn-pay {
+    width: 100%;
+    padding: 16px;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+/* Complete Section */
+.complete-section {
+    position: fixed;
+    inset: 0;
+    z-index: 400;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.complete-content {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 400px;
+}
+
+/* Check Animation */
+.complete-animation {
+    margin-bottom: 24px;
+}
+
+.check-circle {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.check-circle svg {
+    width: 100%;
+    height: 100%;
+}
+
+.check-circle-bg {
+    fill: none;
+    stroke: var(--success);
+    stroke-width: 2;
+    stroke-dasharray: 160;
+    stroke-dashoffset: 160;
+    animation: circle-draw 0.6s ease-out forwards;
+}
+
+.check-mark {
+    fill: none;
+    stroke: var(--success);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    animation: check-draw 0.4s ease-out 0.4s forwards;
+}
+
+@keyframes circle-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes check-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+.complete-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.complete-order-number {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.complete-message {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.complete-summary {
+    background: #f8f9fa;
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.complete-order-items {
+    margin-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+}
+
+.complete-order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 0.9rem;
+}
+
+.complete-total {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+}
+
+.complete-actions {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.complete-actions .btn {
+    flex: 1;
+}
+
+.demo-notice {
+    padding: 16px;
+    background: #FFF5F0;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    color: var(--primary-dark);
+}
+
+.demo-notice p {
+    margin: 2px 0;
+}
