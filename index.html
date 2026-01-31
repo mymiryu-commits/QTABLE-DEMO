@@ -4,138 +4,454 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>QTable | 데모 체험</title>
+    <title>QTable | 태블릿 없이 시작하는 스마트 매장</title>
+    <meta name="description" content="초기비용 0원, 태블릿 없이 QR 하나로 주문부터 대기, 마케팅까지 한번에 해결하세요.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            --primary: #FF6B35;
+            --primary-dark: #E55A2B;
+            --bg-light: #F9FAFB;
+            --text-main: #1F2937;
+            --text-sub: #4B5563;
+            --radius: 16px;
+        }
+
         body {
             margin: 0;
             padding: 0;
             font-family: 'Noto Sans KR', sans-serif;
-            background: #f5f5f5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            background: var(--bg-light);
+            color: var(--text-main);
+            overflow-x: hidden;
         }
 
-        .container {
-            text-align: center;
-            padding: 20px;
-            max-width: 480px;
-            width: 100%;
-        }
-
-        h1 {
-            margin-bottom: 8px;
-            color: #1A1A1A;
-        }
-
-        p {
-            color: #666;
-            margin-bottom: 40px;
-        }
-
-        .card-container {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .mode-card {
+        /* Header */
+        header {
             background: white;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            padding: 16px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--primary);
             text-decoration: none;
-            color: inherit;
             display: flex;
             align-items: center;
-            gap: 20px;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 2px solid transparent;
+            gap: 6px;
+        }
+
+        .btn-start {
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            text-decoration: none;
+            transition: transform 0.2s;
+        }
+
+        .btn-start:active {
+            transform: scale(0.95);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, white 0%, #FFF5F0 100%);
+        }
+
+        .hero h1 {
+            font-size: 1.8rem;
+            line-height: 1.4;
+            margin-bottom: 16px;
+            word-break: keep-all;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .hero p {
+            color: var(--text-sub);
+            font-size: 1rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            word-break: keep-all;
+        }
+
+        /* Tabs */
+        .tab-container {
+            background: white;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 64px;
+            z-index: 90;
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            background: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: #9CA3AF;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Content Sections */
+        .content-area {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(0, 0, 0, 0.03);
             text-align: left;
         }
 
-        .mode-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            display: block;
         }
 
-        .mode-card:active {
-            transform: scale(0.98);
+        .feature-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #111;
         }
 
-        .customer-mode:hover {
-            border-color: #FF6B35;
+        .feature-desc {
+            color: var(--text-sub);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 16px;
         }
 
-        .owner-mode:hover {
-            border-color: #1a1a2e;
+        .tag-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
-        .icon-box {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
+        .tag {
+            background: #F3F4F6;
+            color: #4B5563;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .tag.highlight {
+            background: #FFF5F0;
+            color: var(--primary);
+        }
+
+        /* Demo Section (Bottom) */
+        .demo-section {
+            background: #111827;
+            color: white;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .demo-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 400px;
+            margin: 30px auto 0;
+        }
+
+        .demo-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 16px;
+            text-decoration: none;
+            color: white;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 16px;
+            transition: all 0.2s;
+            text-align: left;
+        }
+
+        .demo-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .demo-icon {
             font-size: 2rem;
-            flex-shrink: 0;
+            width: 50px;
+            text-align: center;
         }
 
-        .customer-mode .icon-box {
-            background: #FFF5F0;
-            color: #FF6B35;
+        .tooltip-trigger {
+            position: relative;
+            display: inline-block;
+            border-bottom: 1px dashed #999;
+            cursor: help;
         }
 
-        .owner-mode .icon-box {
-            background: #F0F0F5;
-            color: #1a1a2e;
+        .tooltip {
+            visibility: hidden;
+            width: 220px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            font-weight: normal;
         }
 
-        h2 {
-            margin: 0 0 4px 0;
-            font-size: 1.1rem;
+        .tooltip-trigger:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
         }
 
-        .desc {
-            font-size: 0.85rem;
-            color: #888;
-            margin: 0;
+        .floating-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #FFE812;
+            color: #3C1E1E;
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 200;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>QTable 데모 체험</h1>
-        <p>10초면 충분합니다. QR 주문을 경험해보세요.</p>
+    <header>
+        <a href="#" class="logo">📱 QTable</a>
+        <a href="#demo" class="btn-start">무료체험</a>
+    </header>
 
-        <div class="card-container">
-            <a href="customer.html" class="mode-card customer-mode" target="_blank">
-                <div class="icon-box">🍽️</div>
-                <div>
-                    <h2>손님용 화면 체험</h2>
-                    <p class="desc">QR 코드를 찍고 들어온 상황입니다.<br>메뉴를 고르고 주문해보세요.</p>
+    <div class="hero">
+        <h1>태블릿 없는<br><span>스마트 매장 혁명</span></h1>
+        <p>초기 비용 0원, 설치비 0원.<br>QR 스티커 하나로 주문부터 마케팅까지.</p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="openTab('smart-order')">🚀 스마트 오더</button>
+            <button class="tab-btn" onclick="openTab('ai-data')">📊 데이터 성공전략</button>
+            <button class="tab-btn" onclick="openTab('marketing')">📢 마케팅·대기</button>
+        </div>
+    </div>
+
+    <!-- 1. 스마트 오더 섹션 -->
+    <div id="smart-order" class="content-area tab-content active">
+        <div class="feature-card">
+            <span class="feature-icon">💸</span>
+            <div class="feature-title">초기 투자비용 0원</div>
+            <p class="feature-desc">비싼 태블릿 구매, 배선 공사, 유지보수가 필요 없습니다. 테이블에 QR 스티커만 붙이면 도입 끝!</p>
+            <div class="tag-group">
+                <span class="tag highlight">태블릿 No</span>
+                <span class="tag highlight">공사비 0원</span>
+                <span class="tag">약정 없음</span>
+            </div>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">💳</span>
+            <div class="feature-title">모든 결제 지원</div>
+            <p class="feature-desc">테이블에서 바로 결제하거나 다 먹고 후불 결제도 OK. 까다로운 더치페이도 QR 하나로 해결됩니다.</p>
+            <div class="tag-group">
+                <span class="tag">선불/후불</span>
+                <span class="tag highlight">개인별 더치페이</span>
+                <span class="tag">간편결제</span>
+            </div>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">✨</span>
+            <div class="feature-title">우리 매장만의 감성</div>
+            <p class="feature-desc">딱딱한 기계 대신, 우리 매장 분위기에 맞는 감성 캐릭터 QR 디자인을 제공합니다.</p>
+            <div class="tag-group">
+                <span class="tag">커스텀 디자인</span>
+                <span class="tag">브랜딩</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 데이터 솔루션 섹션 -->
+    <div id="ai-data" class="content-area tab-content">
+        <div class="feature-card">
+            <span class="feature-icon">🤖</span>
+            <div class="feature-title">AI 맞춤형 솔루션</div>
+            <p class="feature-desc">수집된 사용자 데이터(성별, 연령, 주문패턴)를 분석하여 우리 매장만의 성공 전략을 제안합니다.</p>
+            <div class="tag-group">
+                <span class="tag highlight">고객 데이터 수집</span>
+                <span class="tag">트렌드 분석</span>
+            </div>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">📍</span>
+            <div class="feature-title">상권 분석 & 성공 전략</div>
+            <p class="feature-desc">내 주변 상권 데이터를 분석하여 매출 저조 시 신메뉴 제안, 이벤트 데이 전략 등을 코칭해드립니다.</p>
+            <div class="tag-group">
+                <span class="tag">상권지도</span>
+                <span class="tag">경쟁사 분석</span>
+                <span class="tag highlight">매출 증대 코칭</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 마케팅/대기 섹션 -->
+    <div id="marketing" class="content-area tab-content">
+        <div class="feature-card">
+            <span class="feature-icon">⏳</span>
+            <div class="feature-title">설치비 0원 대기 시스템</div>
+            <p class="feature-desc">비싼 웨이팅 기계 대신 QR로 대기 등록. <span class="tooltip-trigger">카카오톡 알림
+                    <span class="tooltip">※ 사전 준비사항: 카카오 비즈니스 채널 개설이 필요합니다.</span>
+                </span>으로 순서를 알려드립니다.</p>
+            <div class="tag-group">
+                <span class="tag highlight">웨이팅 무료</span>
+                <span class="tag">노쇼 방지</span>
+            </div>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🎁</span>
+            <div class="feature-title">자동 마케팅 & 쿠폰</div>
+            <p class="feature-desc">네이버 리뷰 작성 시 포인트 자동 적립! 비오는 날, 생일 등 타겟 고객에게 카톡 쿠폰을 발송하세요.</p>
+            <div class="tag-group">
+                <span class="tag highlight">네이버 예약 연동</span>
+                <span class="tag">재방문 유도</span>
+                <span class="tag">단골 관리</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo Section -->
+    <div id="demo" class="demo-section">
+        <h2>지금 바로 체험해보세요</h2>
+        <p style="opacity: 0.7; font-weight: 300;">별도 가입 없이 10초 만에 기능을 확인하실 수 있습니다.</p>
+
+        <div class="demo-cards">
+            <a href="customer.html" class="demo-card" target="_blank">
+                <div class="demo-icon">🍽️</div>
+                <div style="flex:1;">
+                    <div style="font-weight:bold; font-size:1.1rem; margin-bottom:4px;">손님용 화면 체험</div>
+                    <div style="font-size:0.85rem; opacity:0.7;">QR 찍고 메뉴 주문하기</div>
                 </div>
+                <span style="opacity:0.5;">➜</span>
             </a>
-
-            <a href="owner.html" class="mode-card owner-mode" target="_blank">
-                <div class="icon-box">�</div>
-                <div>
-                    <h2>사장님용 관리자 화면</h2>
-                    <p class="desc">주문이 들어오면 실시간으로<br>알림이 뜨고 매출이 올라갑니다.</p>
+            <a href="owner.html" class="demo-card" target="_blank">
+                <div class="demo-icon">👨‍🍳</div>
+                <div style="flex:1;">
+                    <div style="font-weight:bold; font-size:1.1rem; margin-bottom:4px;">사장님용 관리자 화면</div>
+                    <div style="font-size:0.85rem; opacity:0.7;">실시간 주문 접수 & 매출 확인</div>
                 </div>
+                <span style="opacity:0.5;">➜</span>
             </a>
         </div>
-
-        <p style="margin-top: 40px; font-size: 0.8rem; color: #999;">
-            💡 Tip: 두 화면을 각각 다른 탭(또는 다른 기기)에 띄워두고,<br>
-            손님 화면에서 주문하면 사장님 화면이 바로 반응합니다!
+        <p style="margin-top: 30px; font-size: 0.8rem; color: #666;">
+            💡 Tip: 두 화면을 동시에 띄워놓고 주문해보세요!
         </p>
     </div>
+
+    <a href="https://pf.kakao.com" target="_blank" class="floating-btn">
+        💬 상담문의
+    </a>
+
+    <script>
+        function openTab(tabId) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+
+            // Highlight button
+            // find button with onclick matching tabId
+            const buttons = document.querySelectorAll('.tab-btn');
+            if (tabId === 'smart-order') buttons[0].classList.add('active');
+            if (tabId === 'ai-data') buttons[1].classList.add('active');
+            if (tabId === 'marketing') buttons[2].classList.add('active');
+        }
+    </script>
 </body>
 
 </html>
