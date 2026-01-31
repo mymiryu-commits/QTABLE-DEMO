@@ -69,7 +69,7 @@
         /* Hero Section */
         .hero {
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px 20px 50px;
             background: linear-gradient(135deg, white 0%, #FFF5F0 100%);
         }
 
@@ -91,6 +91,77 @@
             margin-bottom: 30px;
             line-height: 1.6;
             word-break: keep-all;
+        }
+
+        /* Hero Actions */
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 24px;
+        }
+
+        .action-card {
+            background: white;
+            padding: 16px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.15);
+            border: 1px solid rgba(255, 107, 53, 0.1);
+            transition: transform 0.2s, border-color 0.2s;
+            flex: 1;
+            max-width: 200px;
+            text-align: left;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--primary);
+        }
+
+        .action-card .icon {
+            font-size: 2rem;
+            background: #FFF5F0;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+        }
+
+        .action-card .text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .action-card .title {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #111;
+        }
+
+        .action-card .desc {
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .hero-tip {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 24px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Tabs */
@@ -138,7 +209,25 @@
         .content-area {
             max-width: 600px;
             margin: 0 auto;
-            padding: 30px 20px;
+            padding: 40px 20px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .section-header h3 {
+            font-size: 1.4rem;
+            margin: 0 0 8px 0;
+            color: #111;
+        }
+
+        .section-header p {
+            font-size: 0.95rem;
+            color: #666;
+            margin: 0;
+            word-break: keep-all;
         }
 
         .tab-content {
@@ -212,47 +301,6 @@
             color: var(--primary);
         }
 
-        /* Demo Section (Bottom) */
-        .demo-section {
-            background: #111827;
-            color: white;
-            padding: 50px 20px;
-            text-align: center;
-        }
-
-        .demo-cards {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            max-width: 400px;
-            margin: 30px auto 0;
-        }
-
-        .demo-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: white;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            transition: all 0.2s;
-            text-align: left;
-        }
-
-        .demo-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .demo-icon {
-            font-size: 2rem;
-            width: 50px;
-            text-align: center;
-        }
-
         .tooltip-trigger {
             position: relative;
             display: inline-block;
@@ -270,13 +318,25 @@
             padding: 10px;
             position: absolute;
             z-index: 1;
-            bottom: 125%;
+            bottom: 135%;
             left: 50%;
             margin-left: -110px;
             opacity: 0;
             transition: opacity 0.3s;
             font-size: 0.8rem;
             font-weight: normal;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #333 transparent transparent transparent;
         }
 
         .tooltip-trigger:hover .tooltip {
@@ -293,12 +353,26 @@
             padding: 12px 20px;
             border-radius: 30px;
             font-weight: bold;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             text-decoration: none;
             display: flex;
             align-items: center;
             gap: 8px;
             z-index: 200;
+            transition: transform 0.2s;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            background: #F9FAFB;
+            padding: 40px 20px;
+            text-align: center;
+            color: #999;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
         }
     </style>
 </head>
@@ -306,14 +380,34 @@
 <body>
     <header>
         <a href="#" class="logo">📱 QTable</a>
-        <a href="#demo" class="btn-start">무료체험</a>
+        <a href="#" onclick="window.scrollTo(0,0); return false;" class="btn-start">무료체험</a>
     </header>
 
     <div class="hero">
         <h1>태블릿 없는<br><span>스마트 매장 혁명</span></h1>
         <p>초기 비용 0원, 설치비 0원.<br>QR 스티커 하나로 주문부터 마케팅까지.</p>
+
+        <!-- 상단 배치된 직관적 체험 버튼 -->
+        <div class="hero-actions">
+            <a href="customer.html" class="action-card" target="_blank">
+                <span class="icon">🍽️</span>
+                <div class="text">
+                    <span class="title">손님 화면 체험</span>
+                    <span class="desc">QR 주문해보기</span>
+                </div>
+            </a>
+            <a href="owner.html" class="action-card" target="_blank">
+                <span class="icon">👨‍🍳</span>
+                <div class="text">
+                    <span class="title">사장님 화면 체험</span>
+                    <span class="desc">주문접수 확인</span>
+                </div>
+            </a>
+        </div>
+        <p class="hero-tip">💡 <strong>Tip</strong>: 두 화면을 동시에 띄워놓고 실시간 연동을 확인하세요!</p>
     </div>
 
+    <!-- 탭 네비게이션 -->
     <div class="tab-container">
         <div class="tabs">
             <button class="tab-btn active" onclick="openTab('smart-order')">🚀 스마트 오더</button>
@@ -324,6 +418,10 @@
 
     <!-- 1. 스마트 오더 섹션 -->
     <div id="smart-order" class="content-area tab-content active">
+        <div class="section-header">
+            <h3>왜 QTable 인가요?</h3>
+            <p>기존 테이블오더의 단점은 완벽히 제거했습니다.</p>
+        </div>
         <div class="feature-card">
             <span class="feature-icon">💸</span>
             <div class="feature-title">초기 투자비용 0원</div>
@@ -357,6 +455,10 @@
 
     <!-- 2. 데이터 솔루션 섹션 -->
     <div id="ai-data" class="content-area tab-content">
+        <div class="section-header">
+            <h3>데이터로 매장 키우기</h3>
+            <p>감으로 하는 장사는 그만, 이제 데이터로 승부하세요.</p>
+        </div>
         <div class="feature-card">
             <span class="feature-icon">🤖</span>
             <div class="feature-title">AI 맞춤형 솔루션</div>
@@ -380,6 +482,10 @@
 
     <!-- 3. 마케팅/대기 섹션 -->
     <div id="marketing" class="content-area tab-content">
+        <div class="section-header">
+            <h3>단골 손님 만들기</h3>
+            <p>기다리는 순간부터 나가는 순간까지 완벽하게 케어합니다.</p>
+        </div>
         <div class="feature-card">
             <span class="feature-icon">⏳</span>
             <div class="feature-title">설치비 0원 대기 시스템</div>
@@ -403,33 +509,10 @@
         </div>
     </div>
 
-    <!-- Demo Section -->
-    <div id="demo" class="demo-section">
-        <h2>지금 바로 체험해보세요</h2>
-        <p style="opacity: 0.7; font-weight: 300;">별도 가입 없이 10초 만에 기능을 확인하실 수 있습니다.</p>
-
-        <div class="demo-cards">
-            <a href="customer.html" class="demo-card" target="_blank">
-                <div class="demo-icon">🍽️</div>
-                <div style="flex:1;">
-                    <div style="font-weight:bold; font-size:1.1rem; margin-bottom:4px;">손님용 화면 체험</div>
-                    <div style="font-size:0.85rem; opacity:0.7;">QR 찍고 메뉴 주문하기</div>
-                </div>
-                <span style="opacity:0.5;">➜</span>
-            </a>
-            <a href="owner.html" class="demo-card" target="_blank">
-                <div class="demo-icon">👨‍🍳</div>
-                <div style="flex:1;">
-                    <div style="font-weight:bold; font-size:1.1rem; margin-bottom:4px;">사장님용 관리자 화면</div>
-                    <div style="font-size:0.85rem; opacity:0.7;">실시간 주문 접수 & 매출 확인</div>
-                </div>
-                <span style="opacity:0.5;">➜</span>
-            </a>
-        </div>
-        <p style="margin-top: 30px; font-size: 0.8rem; color: #666;">
-            💡 Tip: 두 화면을 동시에 띄워놓고 주문해보세요!
-        </p>
-    </div>
+    <!-- Footer -->
+    <footer>
+        <p>Copyright © 2026 QTable. All rights reserved.</p>
+    </footer>
 
     <a href="https://pf.kakao.com" target="_blank" class="floating-btn">
         💬 상담문의
@@ -445,7 +528,6 @@
             document.getElementById(tabId).classList.add('active');
 
             // Highlight button
-            // find button with onclick matching tabId
             const buttons = document.querySelectorAll('.tab-btn');
             if (tabId === 'smart-order') buttons[0].classList.add('active');
             if (tabId === 'ai-data') buttons[1].classList.add('active');
